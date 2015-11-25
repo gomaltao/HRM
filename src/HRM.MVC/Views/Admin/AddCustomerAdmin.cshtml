@@ -1,0 +1,16 @@
+﻿@model AddCcustomerAdminViewModel 
+
+
+@{
+// ViewBag.Title = "Home Page";
+}
+
+@using (Html.BeginForm("AddCustomerAdmin", "Admin", FormMethod.Post))
+{ 
+@Html.ValidationSummary(true, "")
+@Html.AntiForgeryToken()
+
+@Html.DisplayFor(m => m.Message)
+@Html.DropDownListFor(m => m.SelectedValue, Model.Users)
+    <button name="button" value="submit">Add</button>
+}

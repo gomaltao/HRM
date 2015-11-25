@@ -1,0 +1,27 @@
+﻿@model  AddDepartmentViewModel 
+
+@{
+// ViewBag.Title = "Home Page";
+}
+
+@using (Html.BeginForm("AddDepartment", "Admin", FormMethod.Post))
+{
+@Html.ValidationSummary(true, "")
+@Html.AntiForgeryToken()
+
+@Html.DisplayFor(m => m.Message)
+    <p>
+        @Html.DropDownListFor(m => m.SelectedValue, Model.Companies)
+    </p>
+<p>
+        @Html.LabelFor( m => m.Title )
+        @Html.EditorFor(m => m.Title)
+    </p>
+    <p>
+        @Html.LabelFor(m => m.Description )
+        @Html.EditorFor(m => m.Description)
+    </p>
+    <p>
+        <button name="button" value="submit">Add</button>
+    </p>
+}

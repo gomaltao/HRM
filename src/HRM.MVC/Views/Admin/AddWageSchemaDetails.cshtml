@@ -1,0 +1,38 @@
+﻿@model AddWageSchemaDetailsViewModel 
+    @{
+// ViewBag.Title = "Home Page";
+}
+
+@using (Html.BeginForm("AddWageSchemaDetails", "Admin", FormMethod.Post))
+{
+    @Html.ValidationSummary(true, "")
+    @Html.AntiForgeryToken()
+    @Html.DisplayFor(m => m.Message )
+    <div>
+        @Html.LabelFor(m => m.SelectedWageSchema )
+        @Html.DropDownListFor(m => m.SelectedWageSchema, Model.wageSchemas , "select wage schema")
+    </div>
+
+    <div>
+        @Html.LabelFor( m => m.SelectedDay )
+        @Html.DropDownListFor(m  => m.SelectedDay , Model.Days, "select day")
+    </div>
+    <div>
+        @Html.LabelFor( m => m.StartHour  )
+        @Html.DropDownListFor(m => m.StartHour, Model.StartHours, "select the start hour for this period"  )
+    </div>
+    <div>
+        @Html.LabelFor(m => m.StartMinute)
+        @Html.DropDownListFor(m => m.StartMinute, Model.StartMinutes, "select the start minute for this period")
+    </div>
+    <div>
+        @Html.LabelFor(m => m.EndHour)
+        @Html.DropDownListFor(m => m.EndHour, Model.EndHours, "select the end hour for this period")
+    </div>
+
+    <div>
+        @Html.LabelFor(m => m.EndMinute )
+        @Html.DropDownListFor(m => m.EndMinute, Model.EndMinutes, "select the end minute for this period")
+    </div>
+    <button name="button" value="submit">Add configuration </button>
+}

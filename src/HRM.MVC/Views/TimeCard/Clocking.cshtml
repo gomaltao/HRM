@@ -1,0 +1,16 @@
+﻿@model ClockingViewModel
+
+@{
+    ViewBag.Title = "clocking in and out";
+}
+
+<h2>@ViewBag.Title</h2>
+@using (Html.BeginForm("Clocking", "TimeCard", FormMethod.Post))
+{
+    @Html.ValidationSummary(true, "")
+    @Html.AntiForgeryToken()
+@Html.DisplayFor( d => d.Message )
+    @Html.TextBoxFor(m => m.UserCode)
+    <button name="button" value="ClockIn">Clock in</button>
+    <button name="button" value="ClockOut">Clock Out</button>
+}

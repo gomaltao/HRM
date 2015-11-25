@@ -1,0 +1,56 @@
+{
+  "webroot": "wwwroot",
+  "userSecretsId": "aspnet5-HRM.MVC-0eb864ce-0b5d-43dd-9143-e38d19f05a99",
+  "version": "1.0.0-*",
+
+  "dependencies": {
+    "HRM.ApplicationLayer": "1.0.0-*",
+    "HRM.Boot": "1.0.0-*",
+    "HRM.Infrastructure": "1.0.0-*",
+    "Microsoft.AspNet.Authentication.Cookies": "1.0.0-rc1-final",
+    "Microsoft.AspNet.Authentication.Facebook": "1.0.0-rc1-final",
+    "Microsoft.AspNet.Authentication.Google": "1.0.0-rc1-final",
+    "Microsoft.AspNet.Authentication.MicrosoftAccount": "1.0.0-rc1-final",
+    "Microsoft.AspNet.Authentication.Twitter": "1.0.0-rc1-final",
+    "Microsoft.AspNet.Diagnostics": "1.0.0-rc1-final",
+    "Microsoft.AspNet.Diagnostics.Entity": "7.0.0-rc1-final",
+    "Microsoft.AspNet.IISPlatformHandler": "1.0.0-rc1-final",
+    "Microsoft.AspNet.Mvc": "6.0.0-rc1-final",
+    "Microsoft.AspNet.Mvc.TagHelpers": "6.0.0-rc1-final",
+    "Microsoft.AspNet.Server.Kestrel": "1.0.0-rc1-final",
+    "Microsoft.AspNet.StaticFiles": "1.0.0-rc1-final",
+    "Microsoft.AspNet.Tooling.Razor": "1.0.0-rc1-final",
+    "Microsoft.Extensions.Configuration.Abstractions": "1.0.0-rc1-final",
+    "Microsoft.Extensions.Configuration.Json": "1.0.0-rc1-final",
+    "Microsoft.Extensions.Configuration.UserSecrets": "1.0.0-rc1-final",
+    "Microsoft.Extensions.Logging": "1.0.0-rc1-final",
+    "Microsoft.Extensions.Logging.Console": "1.0.0-rc1-final",
+    "Microsoft.Extensions.Logging.Debug": "1.0.0-rc1-final",
+    "Microsoft.Extensions.SecretManager": "1.0.0-rc1-final",
+    "Microsoft.VisualStudio.Web.BrowserLink.Loader": "14.0.0-rc1-final",
+    "Microsoft.AspNet.Mvc.ViewFeatures" :  "6.0.0-rc1-final" 
+  },
+  "commands": {
+    "web": "Microsoft.AspNet.Server.Kestrel --Hosting:Application HRM.Boot"
+  },
+  "frameworks": {
+    "dnx451": {},
+    "dnxcore50": {}
+  },
+  "exclude": [
+    "wwwroot",
+    "node_modules"
+  ],
+  "publishExclude": [
+    "**.user",
+    "**.vspscc"
+  ],
+  "scripts": {
+    "prepublish": [
+      "npm install",
+      "bower install",
+      "gulp clean",
+      "gulp min"
+    ]
+  }
+}

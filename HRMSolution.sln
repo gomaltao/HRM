@@ -1,0 +1,68 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.23107.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{D312E0F9-53E1-402F-9D8C-DE8ED735B33D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{ED09E0D3-D8D2-4360-8F92-1D6A1ACD2343}"
+	ProjectSection(SolutionItems) = preProject
+		global.json = global.json
+		NuGet.Config = NuGet.Config
+	EndProjectSection
+EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "HRM.MVC", "src\HRM.MVC\HRM.MVC.xproj", "{52836B60-4A43-4B1F-8006-A4180A773A82}"
+EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "HRM.Boot", "src\HRM.Boot\HRM.Boot.xproj", "{1834A133-0325-479C-91A3-7360A7950A3B}"
+EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "HRM.Infrastructure", "src\HRM.Infrastructure\HRM.Infrastructure.xproj", "{CB8C7AFE-D71E-4F46-B397-F24D7468593D}"
+EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "HRM.Domain", "src\HRM.Domain\HRM.Domain.xproj", "{150AED5A-4F9B-4845-96B2-9D66F816610C}"
+EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "HRM.Patterns", "src\HRM.Patterns\HRM.Patterns.xproj", "{82080168-3370-4302-8580-ECF1E9A157EB}"
+EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "HRM.ApplicationLayer", "src\HRM.ApplicationLayer\HRM.ApplicationLayer.xproj", "{8E7C927C-03B1-4C4E-B781-557C14DC3781}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{52836B60-4A43-4B1F-8006-A4180A773A82}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{52836B60-4A43-4B1F-8006-A4180A773A82}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{52836B60-4A43-4B1F-8006-A4180A773A82}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{52836B60-4A43-4B1F-8006-A4180A773A82}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1834A133-0325-479C-91A3-7360A7950A3B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1834A133-0325-479C-91A3-7360A7950A3B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1834A133-0325-479C-91A3-7360A7950A3B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1834A133-0325-479C-91A3-7360A7950A3B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CB8C7AFE-D71E-4F46-B397-F24D7468593D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CB8C7AFE-D71E-4F46-B397-F24D7468593D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CB8C7AFE-D71E-4F46-B397-F24D7468593D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CB8C7AFE-D71E-4F46-B397-F24D7468593D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{150AED5A-4F9B-4845-96B2-9D66F816610C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{150AED5A-4F9B-4845-96B2-9D66F816610C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{150AED5A-4F9B-4845-96B2-9D66F816610C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{150AED5A-4F9B-4845-96B2-9D66F816610C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{82080168-3370-4302-8580-ECF1E9A157EB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{82080168-3370-4302-8580-ECF1E9A157EB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{82080168-3370-4302-8580-ECF1E9A157EB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{82080168-3370-4302-8580-ECF1E9A157EB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8E7C927C-03B1-4C4E-B781-557C14DC3781}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8E7C927C-03B1-4C4E-B781-557C14DC3781}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8E7C927C-03B1-4C4E-B781-557C14DC3781}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8E7C927C-03B1-4C4E-B781-557C14DC3781}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{52836B60-4A43-4B1F-8006-A4180A773A82} = {D312E0F9-53E1-402F-9D8C-DE8ED735B33D}
+		{1834A133-0325-479C-91A3-7360A7950A3B} = {D312E0F9-53E1-402F-9D8C-DE8ED735B33D}
+		{CB8C7AFE-D71E-4F46-B397-F24D7468593D} = {D312E0F9-53E1-402F-9D8C-DE8ED735B33D}
+		{150AED5A-4F9B-4845-96B2-9D66F816610C} = {D312E0F9-53E1-402F-9D8C-DE8ED735B33D}
+		{82080168-3370-4302-8580-ECF1E9A157EB} = {D312E0F9-53E1-402F-9D8C-DE8ED735B33D}
+		{8E7C927C-03B1-4C4E-B781-557C14DC3781} = {D312E0F9-53E1-402F-9D8C-DE8ED735B33D}
+	EndGlobalSection
+EndGlobal

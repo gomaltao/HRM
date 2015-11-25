@@ -1,0 +1,58 @@
+﻿@model AddStandardUserViewModel
+@{
+// ViewBag.Title = "Home Page";
+}
+@using (Html.BeginForm("AddStandardUser", "Admin", FormMethod.Post))
+{
+    @Html.ValidationSummary(true, "")
+    @Html.AntiForgeryToken()
+
+    @Html.DisplayFor(m => m.Message)
+    <table>
+        <thead>
+        <th>property</th>
+        <th>value</th>
+        </thead>
+        <tfoot></tfoot>
+        <tbody>
+            <tr>
+                <td>@Html.LabelFor(m => m.SSN) </td>
+                <td>@Html.TextBoxFor(m => m.SSN)</td>
+            </tr>
+            <tr>
+                <td>@Html.LabelFor(m => m.Email) </td>
+                <td>@Html.TextBoxFor(m => m.Email)</td>
+            </tr>
+
+            <tr>
+                <td>@Html.LabelFor(m => m.FirstName) </td>
+                <td>@Html.TextBoxFor(m => m.FirstName)</td>
+            </tr>
+            <tr>
+                <td>@Html.LabelFor(m => m.LastName) </td>
+                <td>@Html.TextBoxFor(m => m.LastName)</td>
+            </tr>
+            <tr>
+                <td>@Html.LabelFor(m => m.PhoneNumber) </td>
+                <td>@Html.TextBoxFor(m => m.PhoneNumber)</td>
+            </tr>
+
+            <tr>
+                <td>@Html.LabelFor(m => m.UserCode) </td>
+                <td>@Html.TextBoxFor(m => m.UserCode)</td>
+            </tr>
+
+            <tr>
+                <td>@Html.LabelFor(m => m.UserName) </td>
+                <td>@Html.TextBoxFor(m => m.UserName)</td>
+            </tr>
+
+
+        </tbody>
+
+    </table>
+
+    <div>
+        <button name="button" value="submit">Add</button>
+    </div>
+}

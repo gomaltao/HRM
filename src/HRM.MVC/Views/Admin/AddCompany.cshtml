@@ -1,0 +1,14 @@
+﻿@model AddCompanyViewModel 
+
+@{
+// ViewBag.Title = "Home Page";
+}
+
+@using (Html.BeginForm("AddCompany", "Admin", FormMethod.Post))
+{
+    @Html.ValidationSummary(true, "")
+    @Html.AntiForgeryToken()
+@Html.DisplayFor(m => m.Message) 
+@Html.EditorForModel();
+    <button name="submit" value="finish">submit</button>
+}

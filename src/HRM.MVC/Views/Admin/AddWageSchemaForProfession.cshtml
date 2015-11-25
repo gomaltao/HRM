@@ -1,0 +1,97 @@
+﻿@model AddWageSchemaForProfessionViewModel
+@{
+// ViewBag.Title = "Home Page";
+}
+
+
+
+@using (Html.BeginForm("AddWageSchemaForProfession", "Admin", FormMethod.Post))
+{
+    @Html.ValidationSummary(true, "")
+    @Html.AntiForgeryToken()
+
+
+@Html.DropDownListFor(m => m.SelectedCompany, Model.Companies, "-- select a company")
+<br />
+@Html.DropDownListFor(m => m.SelectedProfession, Model.Professions, "select a profession")
+    <div>
+        <table>
+            <thead>
+                <th>property</th>
+            <th>value</th>
+            </thead>
+            <tfoot></tfoot>
+            <tbody>
+                <tr>
+                    <td>@Html.LabelFor( m => m.Title)</td>
+                    <td>@Html.TextBoxFor( m => m.Title )</td>
+                    <td>@Html.ValidationMessageFor( m => m.Title )</td>
+                </tr>
+                <tr>
+                    <td>@Html.LabelFor(m => m.HourlyWage )</td>
+                    <td>@Html.TextBoxFor( m => m.HourlyWage )</td>
+                    <td>@Html.ValidationMessageFor(m => m.HourlyWage )</td>
+                </tr>
+                <tr>
+                    <td>@Html.LabelFor( m => m.Level)</td>
+                    <td>@Html.TextBoxFor( m => m.Level )</td>
+                    <td>@Html.ValidationMessageFor( m => m.Level )</td>
+                </tr>
+            </tbody>
+
+        </table>
+    </div>
+
+    <div></div>
+    <button name="button" value="submit">Add</button>
+}
+
+
+        @section scripts {
+<script type="text/javascript">
+
+    $(function () {
+        $('#SelectedCompany').change(function () {
+            var CS = $('#SelectedCompany :selected').val();
+            //var CompanySelected = $(this).val();
+            
+
+            CS = CS == "" ? 0 : CS;
+            //When select 'optionLabel' we need to reset it to default as well. So not need 
+            //travel back to server.
+            if (CS == "") {
+                $('#SelectedProfession').empty();
+                $('#SelectedCompany').append('<option value="">--Select a profession--</option>');
+                return;
+            }
+            var myData = { CompanySelected: CS };
+            var myJSon = JSON.stringify(myData);
+            //This is where the dropdownlist cascading main function
+            $.ajax({
+                type: "POST",
+                url: "GetProfessions",                            //Your Action name in the DropDownListConstroller.cs
+                //data: "{'CompanySelected':" + "'" + CS + "'}",  //Parameter in this function, Is cast sensitive and also type must be string
+                data:  myData,
+                //contentType: "application/json; charset=utf-8",
+                dataType: "json"
+
+            }).done(function (data) {
+                //When succeed get data from server construct the dropdownlist here.
+                if (data != null) {
+
+                    $('#SelectedProfession').empty();
+                    $.each(data.Professions, function (AddProfession, data) {
+                        $('#SelectedProfession').append('<option value="' + data.Value + '">' + data.Text + '</option>');
+                    });
+                }
+            }).fail(function (response) {
+                if (response.status != 0) {
+                    alert(response.status + " " + response.statusText);
+                }
+            });
+        });
+    });
+
+
+</script>
+            }

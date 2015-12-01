@@ -161,12 +161,13 @@ namespace HRM.MVC.Controllers
                 [HttpPost]
                 [ValidateAntiForgeryToken]
                 [Authorize(Roles = "SuperAdmin, CustomerAdmin")]
-                public IActionResult AddStandardUser(AddStandardUserViewModel vm)
+                public async Task<IActionResult> AddStandardUser(AddStandardUserViewModel vm)
                 {
             if (ModelState.IsValid)
             {
+                var currentAdmin = await  GetCurrentUserAsync();
                 var adminServices = new AdminServices(uow);
-                var result = adminServices.AddStandardUser(vm.SSN, vm.FirstName, vm.LastName, vm.PhoneNumber, vm.UserName, vm.UserCode, vm.Email );
+                var result = adminServices.AddStandardUser(currentAdmin.Email, vm.UserID, vm.FirstName, vm.LastName, vm.PhoneNumber, vm.UserName, vm.UserCode, vm.Email );
                 if (result.Success)
                 {
                     vm.Message = result.Message;
@@ -270,7 +271,7 @@ if( result.Success)
 
             if (ModelState.IsValid)
             {
-                var result = adminServ.AddWageSchema(Convert.ToInt32( vm.SelectedProfession) , vm.Title, vm.HourlyWage, vm.Level);
+                var result = adminServ.AddWageSchema(Convert.ToInt32( vm.SelectedProfession) , vm.Title, vm.HourlyWage );
                 if (result.Success)
                 {
                     vm.Message = result.Message;
@@ -287,32 +288,65 @@ if( result.Success)
         [Authorize(Roles = "SuperAdmin, CustomerAdmin")]
         public async Task<IActionResult> AddWageSchemaForUser()
         {
+            var vm = new AddWageSchemaForUserViewModel(); 
             var adminServ = new AdminServices(uow);
             var currentAdmin = await GetCurrentUserAsync();
-            return View();
-
+            var result = adminServ.GetUsersForAdmin( currentAdmin.Email );
+            
+            if ( !result.Success)
+            {
+                vm.Users = new SelectList(new List<SelectListItem>(), "Value", "Text");
+                return View(vm);
+            }
+            vm.Users = CreateUserList(result.ReturnValue);
+            return View(vm);
         }
+
+
+        [Authorize(Roles = "SuperAdmin, CustomerAdmin")]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddWageSchemaForUser(AddWageSchemaForUserViewModel vm)
+        {
+            vm.Users = new SelectList(new List<SelectListItem>(), "Value", "Text");
+            if (ModelState.IsValid)
+            {
+                var adminServ = new AdminServices(uow);
+                var currentAdmin = await GetCurrentUserAsync();
+                var result = adminServ.GetUsersForAdmin(currentAdmin.Email);
+
+                if (!result.Success)
+                {
+                    ModelState.AddModelError(string.Empty, result.Message);
+                    return View(vm);
+                }
+                var result2 = adminServ.AddWageSchemaForUser( currentAdmin.Email  ,vm.SelectedUser, vm.Title, vm.HourlyWage);
+                if (!result2.Success)
+                {
+                    ModelState.AddModelError(string.Empty, result.Message);
+                    return View(vm);
+                }
+                vm.Users = CreateUserList(result.ReturnValue);
+                vm.Message = result2.Message;
+                return View(vm);
+            }
+            ModelState.AddModelError(string.Empty, "felaktig inmatning");
+            return View(vm);
+        }
+
 
         [Authorize(Roles = "SuperAdmin, CustomerAdmin")]
         public async Task<IActionResult> AddWageSchemaDetails()
         {
-            var adminServ = new AdminServices(uow);
+                var adminServ = new AdminServices(uow);
             var appUser = await GetCurrentUserAsync();
             AddWageSchemaDetailsViewModel vm = new AddWageSchemaDetailsViewModel();
             vm.Days = GetDays();
-            
             vm.StartHours = GetHours();
             vm.StartMinutes = GetMinutes();
             vm.EndHours = GetHours();
             vm.EndMinutes = GetMinutes();
-            var result = adminServ.GetWageSchemasForUser(appUser.Email);
-            if (!result.Success)
-            {
-                vm.Message = result.Message;
-                vm.wageSchemas = new SelectList( new List<SelectListItem>(), "WageSchemaID", "Title" );
-                return View(vm);
-            }
-            vm.wageSchemas = new SelectList(result.ReturnValue, "WageSchemaID", "Title");
+            vm.wageSchemas = GetWageSchemaDetails(adminServ, appUser.Email);
                 return View(vm);
         }
 
@@ -329,23 +363,52 @@ if( result.Success)
             {
                 var res = adminServ.AddWageSchemaDetails(vm.SelectedWageSchema,  vm.SelectedDay, vm.StartHour, vm.StartMinute, vm.EndHour, vm.EndMinute   ); 
             }
+
             vm.Days = GetDays();
             vm.StartHours = GetHours();
             vm.StartMinutes = GetMinutes();
             vm.EndHours = GetHours();
             vm.EndMinutes = GetMinutes();
-            var result = adminServ.GetWageSchemasForUser(appUser.Email);
-            if (!result.Success)
-            {
-                vm.Message = result.Message;
-                vm.wageSchemas = new SelectList(new List<SelectListItem>(), "WageSchemaID", "Title");
-                return View(vm);
-            }
-            vm.wageSchemas = new SelectList(result.ReturnValue, "WageSchemaID", "Title");
+            vm.wageSchemas = GetWageSchemaDetails(adminServ, appUser.Email);
             return View(vm);
         }
 
+        private SelectList GetWageSchemaDetails( AdminServices adminServ, string AdminEmail )
+        {
+            var WageSchemas = new List<WageSchema>();
+            var result1 = adminServ.GetWageSchemasForUserByProfession( AdminEmail);
+            if (result1.Success)
+            {
+                WageSchemas.AddRange(result1.ReturnValue);
+            }
+            var result2 = adminServ.GetWageSchemasForUser(AdminEmail);
+            if (result2.Success)
+            {
+                WageSchemas.AddRange(result2.ReturnValue);
+            }
+            if (WageSchemas.Count() == 0)
+            {
+                ModelState.AddModelError(string.Empty, "inga löneschema funna");
+                return   new SelectList(new List<SelectListItem>(), "WageSchemaID", "Title");
+            }
+             return  new SelectList(WageSchemas, "WageSchemaID", "Title");
+    }
+
+    public PartialViewResult GetWageSchemaDetailsForUser(int WageSchemaID  )
+        {
+            var adminService = new AdminServices(uow);
+            var detailsResult = adminService.GetWageSchemaDetailsForUser(WageSchemaID);
+            if (!detailsResult.Success)
+            {
+                return PartialView(new List<WageSchemaDetail>() { new WageSchemaDetail() });
+            }
+            var xx = detailsResult.ReturnValue.Count();
+            return PartialView(detailsResult.ReturnValue);
+        }
+
 private SelectList GetDays()
+
+
         {
             var enumData = from DayOfWeek d in Enum.GetValues(typeof(WeekDaysEnum))
                            select new
@@ -392,6 +455,18 @@ private SelectList GetDays()
                            select new SelectListItem{
 Text = c.CompanyName, Value = c.CompanyID};
         }
+
+        private IEnumerable<SelectListItem> CreateUserList(IEnumerable<User>  users )
+        {
+            return from u  in  users 
+                   select new SelectListItem
+                   {
+                       Text = u.FirstName + " " + u.LastName, 
+                       Value = u.UserID
+                   };
+        }
+
+
 
         private async Task<ApplicationUser> GetCurrentUserAsync()
         {

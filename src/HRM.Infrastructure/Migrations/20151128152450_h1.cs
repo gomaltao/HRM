@@ -29,6 +29,7 @@ namespace HRM.Infrastructure.Migrations
                 columns: table => new
                 {
                     UserID = table.Column<string>(type: "varchar(20)", nullable: false),
+                    AdminEmail = table.Column<string>(nullable: false),
                     Email = table.Column<string>(nullable: true),
                     FirstName = table.Column<string>(nullable: false),
                     LastName = table.Column<string>(nullable: false),
@@ -159,8 +160,9 @@ namespace HRM.Infrastructure.Migrations
                     CustomerAdminMail = table.Column<string>(nullable: true),
                     HourlyWage = table.Column<double>(nullable: false),
                     Level = table.Column<int>(nullable: false),
-                    ProfessionID = table.Column<int>(nullable: false),
-                    Title = table.Column<string>(nullable: false)
+                    ProfessionID = table.Column<int>(nullable: false, defaultValue: -1),
+                    Title = table.Column<string>(nullable: false),
+                    UserID = table.Column<string>(type: "varchar(20)", nullable: true, defaultValue: "NotSet")
                 },
                 constraints: table =>
                 {
@@ -171,6 +173,12 @@ namespace HRM.Infrastructure.Migrations
                         principalTable: "Profession",
                         principalColumn: "ProfessionID",
                         onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_WageSchema_User_UserID",
+                        column: x => x.UserID,
+                        principalTable: "User",
+                        principalColumn: "UserID",
+                        onDelete: ReferentialAction.Restrict);
                 });
             migrationBuilder.CreateTable(
                 name: "WageSchemaDetail",
@@ -202,9 +210,9 @@ namespace HRM.Infrastructure.Migrations
             migrationBuilder.DropTable("ProfessionUser");
             migrationBuilder.DropTable("TimeCard");
             migrationBuilder.DropTable("WageSchemaDetail");
-            migrationBuilder.DropTable("User");
             migrationBuilder.DropTable("WageSchema");
             migrationBuilder.DropTable("Profession");
+            migrationBuilder.DropTable("User");
             migrationBuilder.DropTable("Company");
         }
     }

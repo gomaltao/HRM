@@ -19,7 +19,6 @@ namespace HRM.MVC.ViewModels.Account
         [Display(Name = "Remember me?")]
         public bool RememberMe { get; set; }
     
-    [Required]
     [Display(Name = "User name")]
     public string UserName { get; set; }
 

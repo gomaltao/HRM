@@ -15,7 +15,7 @@ namespace HRM.Domain.Model
         public double HourlyWage { get; set; }
         public int Level { get; set; }
 public ICollection<WageSchemaDetail> WageSchemaDetails{get; set;} 
-        public int ProfessionID { get; set; }
+        public int? ProfessionID { get; set; }
         public Profession Profession { get; set; }
         public string UserID { get; set; }
         public User employee { get; set; }

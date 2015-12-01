@@ -11,23 +11,31 @@ namespace HRM.MVC.ViewModels.Admin
     {
 
         [Required]
-        public string SSN { get; set; }
+        [Display(Name ="Personnummer")]
+        public string UserID { get; set; }
 
+        [Display(Name ="Email")]
         public string Email { get; set; }
 
+        
         [Required]
+        [Display(Name = "Användarnamn")]
         public string UserName { get; set; }
 
         [Required]
+        [Display(Name ="Förnamn")]
         public string FirstName { get; set; }
-
+        
         [Required]
+        [Display(Name = "Efternamn")]
         public string LastName { get; set; }
 
         [Required]
+        [Display(Name = "Telefonnummer")]
         public string PhoneNumber { get; set; }
 
         [Required]
+        [Display(Name = "Användarkod")]
         public string UserCode { get; set; }
 
 

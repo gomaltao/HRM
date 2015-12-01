@@ -21,7 +21,7 @@ namespace HRM.Domain.Model
         Thursday,
         Friday,
         Saturday,
-        Sunday
+        Sunday = 7 
     }
 
 public     class Enums

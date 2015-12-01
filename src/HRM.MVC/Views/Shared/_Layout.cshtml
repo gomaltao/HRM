@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿@using System.Security.Claims
+<!DOCTYPE html>
 
 <html>
 <head>
@@ -24,34 +25,53 @@
 <body>
     <div>
 
-        <ul> 
+        <ul>
             <li><a asp-controller="Home" asp-action="Index">Home</a></li>
             <li><a asp-controller="Home" asp-action="About">About</a></li>
             <li><a asp-controller="Home" asp-action="Contact">Contact</a></li>
         </ul>
         @await Html.PartialAsync("_LoginPartial")
 
+        @if (User.Identity.IsAuthenticated)
+        {
+        }
+        @if (@User.IsInRole("SuperAdmin"))
+        {
+            <ul>
+                <li>@Html.ActionLink("Skapa användarkonto", "Register", "Account") </li>
+                <br />
+                <li>@Html.ActionLink("Tilldela A.Konto adminrättigheter", "AddCustomerAdmin", "Admin")</li>
+                <br />
+            </ul>
+        }
 
+        @if (@User.IsInRole("CustomerAdmin"))
+        {
         <ul>
-            <li>@Html.ActionLink("Skapa användarkonto", "Register", "Account") </li>
-            <li>@Html.ActionLink("Tilldela A.Konto adminrättigheter", "AddCustomerAdmin", "Admin")</li>
             <li>@Html.ActionLink("Skapa företag", "AddCompany", "Admin")</li>
+            <br />
             <li>@Html.ActionLink("Skapa enhet", "AddDepartment", "Admin")</li>
             <br />
             <li>@Html.ActionLink("Skapa yrken", "AddProfession", "Admin")</li>
             <br />
             <li>@Html.ActionLink("Skapa löntyp för ett yrke", "AddWageSchemaForProfession", "Admin")</li>
+            <br />
+            <li>@Html.ActionLink("Skapa löntyp för en anställd", "AddWageSchemaForUser", "Admin")</li>
+            <br />
             <li>@Html.ActionLink("Konfigurera löntyp", "AddWageSchemaDetails", "Admin")</li>
             <br />
             <li>@Html.ActionLink("Skapa personal", "AddStandardUser", "Admin")</li>
-            <br />
-            <li>@Html.ActionLink("Stämpla", "Clocking", "TimeCard")</li>
-            <br />
-
-            <li>@Html.ActionLink("Login", "LogIn", "Account")</li>
-            <li>@Html.ActionLink("LogOff", "LogOff", "Account")</li>            
         </ul>
-    </div>
+            }
+
+            <ul>
+                <li>@Html.ActionLink("Stämpla", "Clocking", "TimeCard")</li>
+                <br />
+
+                <li>@Html.ActionLink("Login", "LogIn", "Account")</li>
+                <li>@Html.ActionLink("LogOff", "LogOff", "Account")</li>
+            </ul>
+</div>
     </div>
     </div>
 
@@ -59,7 +79,6 @@
         @RenderBody()
         <hr />
         <footer>
-            @*<p>&copy; 2015 - def1.mvc</p>*@
         </footer>
     </div>
 
@@ -94,4 +113,6 @@
 
 
 </body>
+
+
 </html>

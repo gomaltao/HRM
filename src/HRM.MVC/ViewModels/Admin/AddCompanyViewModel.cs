@@ -11,16 +11,20 @@ namespace HRM.MVC.ViewModels.Admin
     {
 
         [Required]
+        [Display(Name="Organisationsnummer" )]
         public string CompanyID { get; set; }
 
         [Required]
+        [Display(Name="företagets namn" )]
         public string Companyname { get; set; }
-
+        [Display(Name ="Adress")]
         public string Address { get; set; }
 
+        [Display(Name ="Telefonnummer")]
         public string PhoneNumber { get; set; }
 
         [DataType(DataType.EmailAddress)]
+        [Display(Name ="Email")]
         public string Email { get; set; }
 
 

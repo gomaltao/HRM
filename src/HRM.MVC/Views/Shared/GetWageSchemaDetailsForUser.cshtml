@@ -1,0 +1,27 @@
+﻿@using HRM.Domain.Model;
+@model IEnumerable<WageSchemaDetail> 
+
+<table>
+    <thead>
+        <tr>
+            <th>Start tid</th>
+            <th>Slut tid </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.StartTime</td>
+                <td>@item.EndTime</td>
+            </tr>
+        }
+    </tbody>
+
+</table>
+
+        @section scripts {
+<script type="text/javascript">
+
+</script>
+            }

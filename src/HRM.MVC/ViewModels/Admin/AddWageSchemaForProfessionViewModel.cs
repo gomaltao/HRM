@@ -15,11 +15,12 @@ public IEnumerable<SelectListItem> Companies { get; set; }
         public IEnumerable<SelectListItem> Professions { get; set; }
 
         [Required]
+        [Display(Name = "Titel")]
         public string Title { get; set; }
-
+        [Required]
+        [Display(Name = "timlön")]
         public double HourlyWage { get; set; }
 
-        public int Level { get; set; }
 
 
 }

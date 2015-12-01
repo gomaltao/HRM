@@ -18,6 +18,9 @@ namespace HRM.Domain.Model
         public TimeSpan EndTime { get; private set; }
         private IUnitOfWork uow;
 
+        public WageSchemaDetail()
+        {
+        }
 
         public WageSchemaDetail(IUnitOfWork _uow,  int wageSchemaID,  WeekDaysEnum day, TimeSpan startTime, TimeSpan endTime )
         {
@@ -31,11 +34,11 @@ namespace HRM.Domain.Model
     public bool Validate()
     {
         if (EndTime < StartTime) return false;
-            var invalidDetail = uow.WageSchemaDetailsRepository.GetEagerLoad(w =>
-              Enum.Equals(w.Day,  this.Day )
+                var invalidDetail = uow.WageSchemaDetailsRepository.GetEagerLoad(w =>
+              Enum.Equals(w.Day, this.Day)
               && (
               (this.StartTime >= w.StartTime && this.StartTime < w.EndTime)
-              || (this.EndTime > w.StartTime && this.EndTime <= w.EndTime))
+                || (this.EndTime > w.StartTime && this.EndTime <= w.EndTime))
                 ).FirstOrDefault();
             return invalidDetail != null ? false : true;
         //return true;

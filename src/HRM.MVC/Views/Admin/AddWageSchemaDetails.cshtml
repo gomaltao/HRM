@@ -12,7 +12,9 @@
         @Html.LabelFor(m => m.SelectedWageSchema )
         @Html.DropDownListFor(m => m.SelectedWageSchema, Model.wageSchemas , "select wage schema")
     </div>
+<div id="details">
 
+</div>
     <div>
         @Html.LabelFor( m => m.SelectedDay )
         @Html.DropDownListFor(m  => m.SelectedDay , Model.Days, "select day")
@@ -34,5 +36,54 @@
         @Html.LabelFor(m => m.EndMinute )
         @Html.DropDownListFor(m => m.EndMinute, Model.EndMinutes, "select the end minute for this period")
     </div>
-    <button name="button" value="submit">Add configuration </button>
+    
+    <input type="submit" id="save" value="Save" />
+           }
+           @section scripts {
+    <script type="text/javascript">
+        $(function () {
+            
+            $('#SelectedWageSchema').change(function () {
+                var ws = $('#SelectedWageSchema option:selected').val();
+                var URL = 'GetWageSchemaDetailsForUser?WageSchemaID=' + ws;
+
+                $.ajax({
+                    url: URL,
+                    contentType: 'application/html; charset=utf-8',
+                    type: 'GET',
+                    dataType: 'html'
+                })
+.success(function (result) {
+    $('#details').html(result);
+})
+.error(function (xhr, status) {
+    alert(status);
+});
+            });
+
+            $("#save").click(function () {
+                
+                var ws = $('#SelectedWageSchema option:selected').val();
+                window.alert(ws);
+                var u1 = 'GetWageSchemaDetailsForUser?WageSchemaID=';
+                window.al(u1);
+            var URL = + ws;
+            window.alert(url);
+            $.ajax({
+                url: URL,
+                contentType: 'application/html; charset=utf-8',
+                type: 'GET',
+                dataType: 'html'
+            })
+.success(function (result) {
+    $('#details').html(result);
+})
+.error(function (xhr, status) {
+    alert(status);
+});
+        });
+
+
+        });
+</script>
 }

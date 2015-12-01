@@ -14,8 +14,10 @@ namespace HRM.MVC.ViewModels.Admin
         public IEnumerable<SelectListItem> Companies { get; set; }
 
         [Required]
+        [Display(Name ="Beskrivning")]
         public string Description { get; set; }
 
+        [Display(Name ="Titel" )]
     [Required ]
     public string Title { get; set; }
 }

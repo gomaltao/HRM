@@ -118,6 +118,9 @@ namespace HRM.Infrastructure.Migrations
                     b.Property<string>("UserID")
                         .HasAnnotation("Relational:ColumnType", "varchar(20)");
 
+                    b.Property<string>("AdminEmail")
+                        .IsRequired();
+
                     b.Property<string>("Email");
 
                     b.Property<string>("FirstName")
@@ -146,7 +149,7 @@ namespace HRM.Infrastructure.Migrations
 
                     b.Property<int>("Level");
 
-                    b.Property<int>("ProfessionID");
+                    b.Property<int?>("ProfessionID");
 
                     b.Property<string>("Title")
                         .IsRequired();

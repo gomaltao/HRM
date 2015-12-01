@@ -22,22 +22,21 @@ namespace HRM.ApplicationLayer
             uow = _uow;
         }
 
-        public BasicResult AddStandardUser(string UserID, string firstName, string lastName, string phoneNumber, string userName, string userCode, string email = "" )
+        public BasicResult AddStandardUser(string adminEmail,   string UserID, string firstName, string lastName, string phoneNumber, string userName, string userCode, string email = "" )
         {
-            var usr = uow.UserRepository.GetEagerLoad(w => w.UserID.Equals(UserID, StringComparison.OrdinalIgnoreCase)).FirstOrDefault();
-            if (usr == null)
-            {
-                // check if correct  UserID
-                var user = new User()
-                { UserID = UserID, FirstName = firstName, LastName = lastName, PhoneNumber = phoneNumber, UserName = userName, UserCode = userCode, Email = email  };
-                uow.UserRepository.Insert(user);
-                uow.Save();
-                return new BasicResult(true, "user created", null);
-            }
-            else
+            var usr = uow.UserRepository.GetEagerLoad(w => 
+            w.UserID.Equals(UserID, StringComparison.OrdinalIgnoreCase) 
+            && w.AdminEmail.Equals( adminEmail, StringComparison.OrdinalIgnoreCase)
+            ).FirstOrDefault();
+            if (usr != null)
             {
                 return new BasicResult(false, "user already exists", null);
             }
+                var user = new User()
+                { AdminEmail = adminEmail,  UserID = UserID, FirstName = firstName, LastName = lastName, PhoneNumber = phoneNumber, UserName = userName, UserCode = userCode, Email = email  };
+                uow.UserRepository.Insert(user);
+                uow.Save();
+                return new BasicResult(true, "user created", null);
         }
 
         public BasicResult Addprofession(string email,  string CompanyID, string UserID , string title, string description)
@@ -57,7 +56,7 @@ namespace HRM.ApplicationLayer
             uow.Save();
             return new BasicResult(true, "The profession  is added", null);
         }
-        public BasicResult AddWageSchema(int   professionID, string title,  double hourlyWage, int level )
+        public BasicResult AddWageSchema(int   professionID, string title,  double hourlyWage )
         {
             var currentWageSchema = uow.WageSchemaRepository.GetEagerLoad( ws => ws.ProfessionID == professionID && ws.Title.Equals(title, StringComparison.OrdinalIgnoreCase)).FirstOrDefault();
             if( currentWageSchema != null)
@@ -65,46 +64,50 @@ namespace HRM.ApplicationLayer
                 return new BasicResult(false, "wage schema already exists", null);
             }
             currentWageSchema = new WageSchema()
-            { ProfessionID = professionID, Title = title, HourlyWage = hourlyWage, Level = level       };
+            { ProfessionID = professionID, Title = title, HourlyWage = hourlyWage };
             uow.WageSchemaRepository.Insert(currentWageSchema);
             uow.Save();
             return new BasicResult(true, "wage  schema added", null);
         }
 
-        public CollectionResult<WageSchema>   GetWageSchemasForUser( string email )
+        public CollectionResult<WageSchema>   GetWageSchemasForUserByProfession( string email )
         {
             var currentUser = uow.UserRepository.GetEagerLoad( u => u.Email.Equals( email, StringComparison.OrdinalIgnoreCase) , includeProperties: inc => inc.professionUsers  ).FirstOrDefault();
             if( currentUser == null)
             {
-                return new CollectionResult<WageSchema>(false, null, "no standard user ", null );
+                return new CollectionResult<WageSchema>(false, null, "denna användare har inte tilldelats någon peersonal användare", null );
             }
             var profsIDs  = currentUser.professionUsers.Where(w => w.UserID.Equals(currentUser.UserID, StringComparison.OrdinalIgnoreCase)).Select( s => s.ProfessionID ) ;
             if( profsIDs== null )
             {
-                return new CollectionResult<WageSchema>( false, null, "no professions for this user", null );
+                return new CollectionResult<WageSchema>( false, null, "denna personal har inte tilldelats något yrke", null );
             }
-            var WageSchemaList = uow.WageSchemaRepository.GetEagerLoad( ws => profsIDs.Contains(ws.ProfessionID ));
+            var WageSchemaList = uow.WageSchemaRepository.GetEagerLoad( ws => profsIDs.Contains(ws.ProfessionID ?? -1  ));
             if ( WageSchemaList == null )
             {
-                return new CollectionResult<WageSchema>(false, null, "no wage schema  for this user", null );
+                return new CollectionResult<WageSchema>(false, null, "inget löneschema för denna personal", null );
             }
             return new CollectionResult<WageSchema>(true, WageSchemaList.AsEnumerable(), "wage schema  found", null );
         }
 
-
-        public BasicResult AddWageSchema2(int professionID,   string title, double HourlyWage, int level   )
+        public CollectionResult<WageSchema> GetWageSchemasForUser(string email)
         {
-            var hrp = new WageSchema( )
+            var currentUser = uow.UserRepository.GetEagerLoad(u => u.Email.Equals(email, StringComparison.OrdinalIgnoreCase)).FirstOrDefault();
+            if(currentUser == null)
             {
-                ProfessionID = professionID, 
-                Title = title,
-                HourlyWage = HourlyWage,
-                Level = level 
-            };
-            uow.WageSchemaRepository.Insert(hrp);
-            return new BasicResult(true, "wage schema added", null);
+                return new CollectionResult<WageSchema>( false, null, "ingen personal definierad för denna användare", null );
+            }
+            var WageSchemas = uow.WageSchemaRepository.GetEagerLoad( w => !string.IsNullOrEmpty(w.CustomerAdminMail) && w.CustomerAdminMail.Equals(email , StringComparison.OrdinalIgnoreCase ));
+            if( WageSchemas == null )
+            {
+
+                return new CollectionResult<WageSchema>(false, null , "inga lönescheman för denna användare", null );
+            }
+            return new CollectionResult<WageSchema>(true,  WageSchemas, "löneschamn funna", null);
         }
 
+
+        
         public BasicResult AddWageSchemaDetails(int wageSchemaID, int day, int startHour, int startMinute, int endHour, int endMinute )  
         {
             var startTime = new TimeSpan(startHour, startMinute, 0);
@@ -127,9 +130,46 @@ namespace HRM.ApplicationLayer
             return new BasicResult(true, "wage schema info addded", null);
         }
 
-        public BasicResult GetUsersForAdmin( string AdminMail )
+        public CollectionResult<User>  GetUsersForAdmin( string AdminMail )
         {
-            return new BasicResult(true, "anställda hittade", null);
+            var users = uow.UserRepository.GetEagerLoad( u => u.AdminEmail.Equals(AdminMail, StringComparison.OrdinalIgnoreCase   )); 
+            if( users == null || users.Count() == 0 )
+            {
+                return new CollectionResult<User>(false, null , "inga anställda för denna admin", null);
+            }
+            return new CollectionResult<User>( true, users , "anställda hittade", null);
         }
-    }
-}
+
+        public BasicResult  AddWageSchemaForUser(string AdminEmail,  string UserID, string Title, double HourlyWage )
+        {
+            var ws = uow.WageSchemaRepository.GetEagerLoad( w => w
+            .UserID.Equals(UserID, StringComparison.OrdinalIgnoreCase ) 
+            && w.Title.Equals( Title, StringComparison.OrdinalIgnoreCase))
+            .FirstOrDefault();
+if( ws != null)
+            {
+                return new BasicResult(false, "det finns redan ett löneschema med titeln " + Title + " för denna anställda", null);
+            }
+            ws = new WageSchema();
+            ws.Title = Title;
+            ws.UserID = UserID;
+            ws.HourlyWage = HourlyWage;
+            ws.CustomerAdminMail = AdminEmail;
+            uow.WageSchemaRepository.Insert(ws);
+            uow.Save();
+            return new BasicResult(true, "löneschamt tillagt", null);
+
+        }
+
+        public CollectionResult<WageSchemaDetail>  GetWageSchemaDetailsForUser( int WageSchemaID   )
+        {
+            var details = uow.WageSchemaDetailsRepository.GetEagerLoad(w => w.WageSchemaID == WageSchemaID);
+            if( details == null )
+            {
+                return new CollectionResult<WageSchemaDetail>(false, null, "inga schema detaljer tillagda", null);
+            }
+            return new CollectionResult<WageSchemaDetail>(true, details, "lönteschema detaljer hittade", null  );
+        }
+
+    } // class 
+} // namespace

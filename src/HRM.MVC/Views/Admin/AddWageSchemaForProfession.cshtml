@@ -32,11 +32,6 @@
                     <td>@Html.TextBoxFor( m => m.HourlyWage )</td>
                     <td>@Html.ValidationMessageFor(m => m.HourlyWage )</td>
                 </tr>
-                <tr>
-                    <td>@Html.LabelFor( m => m.Level)</td>
-                    <td>@Html.TextBoxFor( m => m.Level )</td>
-                    <td>@Html.ValidationMessageFor( m => m.Level )</td>
-                </tr>
             </tbody>
 
         </table>
@@ -53,9 +48,6 @@
     $(function () {
         $('#SelectedCompany').change(function () {
             var CS = $('#SelectedCompany :selected').val();
-            //var CompanySelected = $(this).val();
-            
-
             CS = CS == "" ? 0 : CS;
             //When select 'optionLabel' we need to reset it to default as well. So not need 
             //travel back to server.

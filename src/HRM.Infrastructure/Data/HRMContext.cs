@@ -43,6 +43,7 @@ using Microsoft.Dnx.Runtime;
             modelBuilder.Entity<User>().Property(p => p.UserID).HasColumnType("varchar(20)");
             modelBuilder.Entity<User>().Property(p => p.FirstName).IsRequired();
             modelBuilder.Entity<User>().Property(p => p.LastName).IsRequired();
+            modelBuilder.Entity<User>().Property(p => p.AdminEmail).IsRequired();
 
             //modelBuilder.Entity<TimeCard>().HasKey(k => k.TimeCardID);
             modelBuilder.Entity<TimeCard>().Property(p => p.TimeCardID).ValueGeneratedOnAdd();
@@ -59,11 +60,13 @@ using Microsoft.Dnx.Runtime;
             //modelBuilder.Entity<WageSchema>().HasKey(k => k.WageSchemaID);
             modelBuilder.Entity<WageSchema>().Property(p => p.WageSchemaID).ValueGeneratedOnAdd();
             modelBuilder.Entity<WageSchema>().Property(p => p.UserID).HasColumnType("varchar(20)");
+            modelBuilder.Entity<WageSchema>().Property(p => p.Title).IsRequired();
+            modelBuilder.Entity<WageSchema>().Property(p => p.HourlyWage).IsRequired();
             //modelBuilder.Entity<WageSchema>().HasOne(p => p.Profession).WithMany(w => w.WageSchemas).HasForeignKey (f => f.ProfessionID);
             //modelBuilder.Entity<WageSchema>().HasOne(p => p.Profession).WithMany(w => w.WageSchemas);
             //modelBuilder.Entity<WageSchema>().Property(p => p.ProfessionID).IsRequired();
             //modelBuilder.Entity<WageSchema>().HasOne(o => o.employee).WithMany(w => w.WageSchemas);
-            modelBuilder.Entity<WageSchema>().Property(p => p.Title).IsRequired();
+
 
 
             //modelBuilder.Entity<WageSchemaDetail>().HasKey(k => k.WageSchemaDetailID);

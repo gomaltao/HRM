@@ -12,9 +12,11 @@ namespace HRM.MVC.ViewModels.Admin
     {
 
         [Required]
+        [Display(Name ="Titel")]
         public string Title { get; set; }
 
         [Required]
+        [Display(Name = "Beskrivning")]
         public string Description { get; set; }
 
         public string SelectedValue { get; set; }

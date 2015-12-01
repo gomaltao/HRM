@@ -1,0 +1,25 @@
+﻿@model AddWageSchemaForUserViewModel 
+@{
+// ViewBag.Title = "Home Page";
+}
+
+@using (Html.BeginForm("AddWageSchemaForUser", "Admin", FormMethod.Post))
+{
+    @Html.ValidationSummary(true, "")
+    @Html.AntiForgeryToken()
+
+
+@Html.DropDownListFor(m => m.SelectedUser, Model.Users, "-- välj en anställd")
+<br />
+@Html.EditorFor( md => md.Title)
+    <br />
+    @Html.EditorFor( md => md.HourlyWage )
+    <button name="button" value="submit">Add</button>
+}
+
+
+        @section scripts {
+<script type="text/javascript">
+
+</script>
+            }

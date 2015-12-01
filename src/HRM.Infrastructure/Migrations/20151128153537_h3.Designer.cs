@@ -8,8 +8,8 @@ using HRM.Infrastructure.Data;
 namespace HRM.Infrastructure.Migrations
 {
     [DbContext(typeof(HRMContext))]
-    [Migration("20151123134708_h4")]
-    partial class h4
+    [Migration("20151128153537_h3")]
+    partial class h3
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -119,6 +119,9 @@ namespace HRM.Infrastructure.Migrations
                     b.Property<string>("UserID")
                         .HasAnnotation("Relational:ColumnType", "varchar(20)");
 
+                    b.Property<string>("AdminEmail")
+                        .IsRequired();
+
                     b.Property<string>("Email");
 
                     b.Property<string>("FirstName")
@@ -147,7 +150,7 @@ namespace HRM.Infrastructure.Migrations
 
                     b.Property<int>("Level");
 
-                    b.Property<int>("ProfessionID");
+                    b.Property<int?>("ProfessionID");
 
                     b.Property<string>("Title")
                         .IsRequired();

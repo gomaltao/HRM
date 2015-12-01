@@ -8,7 +8,7 @@ using HRM.Infrastructure.Data;
 namespace HRM.Infrastructure.Migrations
 {
     [DbContext(typeof(HRMContext))]
-    [Migration("20151123132425_h1")]
+    [Migration("20151128152450_h1")]
     partial class h1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -119,6 +119,9 @@ namespace HRM.Infrastructure.Migrations
                     b.Property<string>("UserID")
                         .HasAnnotation("Relational:ColumnType", "varchar(20)");
 
+                    b.Property<string>("AdminEmail")
+                        .IsRequired();
+
                     b.Property<string>("Email");
 
                     b.Property<string>("FirstName")
@@ -147,10 +150,17 @@ namespace HRM.Infrastructure.Migrations
 
                     b.Property<int>("Level");
 
-                    b.Property<int>("ProfessionID");
+                    b.Property<int>("ProfessionID")
+                        .HasAnnotation("Relational:DefaultValue", "-1")
+                        .HasAnnotation("Relational:DefaultValueType", "System.Int32");
 
                     b.Property<string>("Title")
                         .IsRequired();
+
+                    b.Property<string>("UserID")
+                        .HasAnnotation("Relational:ColumnType", "varchar(20)")
+                        .HasAnnotation("Relational:DefaultValue", "NotSet")
+                        .HasAnnotation("Relational:DefaultValueType", "System.String");
 
                     b.HasKey("WageSchemaID");
                 });
@@ -219,6 +229,10 @@ namespace HRM.Infrastructure.Migrations
                     b.HasOne("HRM.Domain.Model.Profession")
                         .WithMany()
                         .HasForeignKey("ProfessionID");
+
+                    b.HasOne("HRM.Domain.Model.User")
+                        .WithMany()
+                        .HasForeignKey("UserID");
                 });
 
             modelBuilder.Entity("HRM.Domain.Model.WageSchemaDetail", b =>

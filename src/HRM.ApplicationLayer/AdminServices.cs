@@ -119,9 +119,9 @@ namespace HRM.ApplicationLayer
             {
                 return  new BasicResult(false, "starttiden är större än sluttiden"  , null); 
             }
-            var wageDS = new WageDomainServices(uow);
-            var validDetail = wageDS.VerifyStartAndEndTime(details);
-            if (!validDetail)
+            //var wageDS = new WageDomainServices(uow);
+            //var validDetail = wageDS.VerifyStartAndEndTime(details);
+            if (!valid)
             {
                 return new BasicResult(false, "överlappande period för " + day.ToString(), null);
             }

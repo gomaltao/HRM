@@ -35,7 +35,8 @@ namespace HRM.Domain.Model
     {
         if (EndTime < StartTime) return false;
                 var invalidDetail = uow.WageSchemaDetailsRepository.GetEagerLoad(w =>
-              Enum.Equals(w.Day, this.Day)
+                w.WageSchemaID == WageSchemaID 
+              && Enum.Equals(w.Day, this.Day)
               && (
               (this.StartTime >= w.StartTime && this.StartTime < w.EndTime)
                 || (this.EndTime > w.StartTime && this.EndTime <= w.EndTime))

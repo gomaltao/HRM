@@ -3,30 +3,49 @@
 // ViewBag.Title = "Home Page";
 }
 
-@using (Html.BeginForm("AddWageSchemaDetails", "Admin", FormMethod.Post))
+@using (Html.BeginForm("AddWageSchemaDetails", "Admin", FormMethod.Post, new { id = "form1" }))
 {
+
+
     @Html.ValidationSummary(true, "")
     @Html.AntiForgeryToken()
     @Html.DisplayFor(m => m.Message )
+
     <div>
         @Html.LabelFor(m => m.SelectedWageSchema )
         @Html.DropDownListFor(m => m.SelectedWageSchema, Model.wageSchemas , "select wage schema")
     </div>
-<div id="details">
 
+<div id="DetailDiv">
+    <table id="DetailTable">
+        <thead>
+            <tr>
+                <th>Dag</th>
+                <th>Starttid</th>
+                <th>SlutTid</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
 </div>
+<input type="submit" id="DeleteRow" value="Delete" />
+
     <div>
         @Html.LabelFor( m => m.SelectedDay )
         @Html.DropDownListFor(m  => m.SelectedDay , Model.Days, "select day")
     </div>
+
     <div>
         @Html.LabelFor( m => m.StartHour  )
         @Html.DropDownListFor(m => m.StartHour, Model.StartHours, "select the start hour for this period"  )
     </div>
+
     <div>
         @Html.LabelFor(m => m.StartMinute)
         @Html.DropDownListFor(m => m.StartMinute, Model.StartMinutes, "select the start minute for this period")
     </div>
+
     <div>
         @Html.LabelFor(m => m.EndHour)
         @Html.DropDownListFor(m => m.EndHour, Model.EndHours, "select the end hour for this period")
@@ -39,51 +58,101 @@
     
     <input type="submit" id="save" value="Save" />
            }
+
            @section scripts {
     <script type="text/javascript">
-        $(function () {
-            
-            $('#SelectedWageSchema').change(function () {
+        $(function ()
+        {
+
+            function GetDetails() {
+                var ws = $('#SelectedWageSchema option:selected').val();
+                ws = ws == "" ? 0 : ws;
+                if (ws == "") {
+                    return;
+                }
+                var myData = {WageSchemaID:ws};
+                var URL = "GetWageSchemaDetailsForUser";
+                $.ajax({
+                    url : "GetWageSchemaDetailsForUser",
+                    type: 'GET',
+                    cache : false, 
+                    data:  myData,
+                    dataType: 'json',
+                    //contentType: "application/json; charset=utf-8"
+                })
+.done(function (result) {
+
+    $.each(result, function (i, value) {
+        var row = $("<tr></tr>").appendTo(DetailTable);
+        $("<td></td>").text(value.Day).appendTo(row);
+        $("<td></td>").text(value.StartTime).appendTo(row);
+        $("<td></td>").text(value.EndTime).appendTo(row);
+        var $ctrl = $('<input/>').attr({ type: 'checkbox', name:'chk', id : value.WageSchemaDetailID }).addClass("chk");
+        $("<td></td>").append($ctrl).appendTo(row);
+    });
+
+    })
+.fail(function (xhr, status) {
+    alert(status);
+});
+            }
+
+            $("#DeleteRow").click(function (e) {
+                e.preventDefault();
+
+                $('.chk:checked').each(function () {
+                    alert($(this).attr("id"));
+                });
+
+                GetDetails();
+            });
+
+            function GetDetails3() {
+                
                 var ws = $('#SelectedWageSchema option:selected').val();
                 var URL = 'GetWageSchemaDetailsForUser?WageSchemaID=' + ws;
-
                 $.ajax({
                     url: URL,
                     contentType: 'application/html; charset=utf-8',
                     type: 'GET',
+                    cache : false, 
                     dataType: 'html'
                 })
-.success(function (result) {
+.done(function (result) {
+    
     $('#details').html(result);
 })
-.error(function (xhr, status) {
+.fail(function (xhr, status) {
     alert(status);
 });
+            }
+
+
+
+            $('#SelectedWageSchema').change(function () {
+                GetDetails();
+            })
+
+            $("#save").click(function (e) {
+                e.preventDefault();
+
+            var promise = $.ajax({
+                url: '@Url.Action("AddWageSchemaDetails","Admin")',
+                data: $('#form1').serialize(),
+                type: 'post'
+            })
+.done(function (result) {
+})
+.fail(function (xhr, status) {
+    alert(status);
+});
+                promise.then(GetDetails);
             });
 
-            $("#save").click(function () {
-                
-                var ws = $('#SelectedWageSchema option:selected').val();
-                window.alert(ws);
-                var u1 = 'GetWageSchemaDetailsForUser?WageSchemaID=';
-                window.al(u1);
-            var URL = + ws;
-            window.alert(url);
-            $.ajax({
-                url: URL,
-                contentType: 'application/html; charset=utf-8',
-                type: 'GET',
-                dataType: 'html'
-            })
-.success(function (result) {
-    $('#details').html(result);
-})
-.error(function (xhr, status) {
-    alert(status);
-});
-        });
+
 
 
         });
+
 </script>
 }

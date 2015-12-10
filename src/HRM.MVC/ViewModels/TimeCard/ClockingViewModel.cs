@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.ComponentModel.DataAnnotations;
     
-yynamespace HRM.MVC.ViewModels.TimeCard
+namespace HRM.MVC.ViewModels.TimeCard
 {
     public class ClockingViewModel :  BaseViewModel 
     {

@@ -1,27 +1,32 @@
 ﻿@using HRM.Domain.Model;
-@model IEnumerable<WageSchemaDetail> 
+@model IList<WageSchemaDetail> 
 
+@using (Html.BeginForm())
+{
 <table>
     <thead>
         <tr>
+            <th>Dag</th>
             <th>Start tid</th>
             <th>Slut tid </th>
+            <th></th>
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model)
+        @*@foreach (var item in Model)*@
+       @for( int i = 0; i < Model.Count();i++   )
         {
             <tr>
-                <td>@item.StartTime</td>
-                <td>@item.EndTime</td>
+                @*<td>@item.Day</td>*@
+                <td>@Html.DisplayFor( md => md[i].Day  )</td>
+                @*<td>@item.StartTime</td>*@
+                <td>@Html.DisplayFor(md => md[i].StartTime)</td>
+                @*<td>@item.EndTime</td>*@
+                <td>@Html.DisplayFor(md => md[i].EndTime)</td>
+                <td><button type="button" class="delete-button" data-id="@Model[i].WageSchemaDetailID">Delete</button></td>
             </tr>
+
         }
     </tbody>
-
 </table>
-
-        @section scripts {
-<script type="text/javascript">
-
-</script>
-            }
+}

@@ -394,29 +394,45 @@ if( result.Success)
              return  new SelectList(WageSchemas, "WageSchemaID", "Title");
     }
 
-    public PartialViewResult GetWageSchemaDetailsForUser(int WageSchemaID  )
+    //public PartialViewResult GetWageSchemaDetailsForUser(int WageSchemaID  )
+            public JsonResult GetWageSchemaDetailsForUser(int WageSchemaID)
         {
             var adminService = new AdminServices(uow);
-            var detailsResult = adminService.GetWageSchemaDetailsForUser(WageSchemaID);
+                   var detailsResult = adminService.GetWageSchemaDetailsForUser(WageSchemaID);
             if (!detailsResult.Success)
             {
-                return PartialView(new List<WageSchemaDetail>() { new WageSchemaDetail() });
+                //return PartialView(new List<WageSchemaDetail>() { new WageSchemaDetail() });
+                return Json(new List<WageSchemaDetail>() { new WageSchemaDetail() });
             }
             var xx = detailsResult.ReturnValue.Count();
-            return PartialView(detailsResult.ReturnValue);
+            var retResult = detailsResult.ReturnValue.OrderBy(o => o.Day).ThenBy(o => o.StartTime).ThenBy(o => o.EndTime).ToList();
+            return Json( retResult   );
         }
 
 private SelectList GetDays()
 
 
         {
+            var res = new List<SelectListItem>();
+            foreach( var  d in Enum.GetValues(typeof(WeekDaysEnum)))
+            {
+                var si = new SelectListItem() { 
+                    Value = ( (int)d).ToString(),
+                    //ID = (int)d,
+                    Text = d.ToString()
+                    //Name = d.ToString()
+                };
+                res.Add(si);
+            }
+
             var enumData = from DayOfWeek d in Enum.GetValues(typeof(WeekDaysEnum))
                            select new
                            {
                                ID = (int)d,
                                Name = d.ToString()
                            };
- return                new SelectList(enumData, "ID", "Name");
+ //return                new SelectList(enumData, "ID", "Name");
+            return new SelectList(res, "Value", "Text");
         }
 
         private SelectList GetWageSchemas( CollectionResult<WageSchema> result)
